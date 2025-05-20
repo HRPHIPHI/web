@@ -2,11 +2,11 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>English Test - แบบฟอร์ม</title>
+  <title>English Test Form</title>
   <style>
     body {
       font-family: 'Prompt', sans-serif;
-      background-color: #f6f1ee;
+      background-color: #f4ede8;
       padding: 30px;
       text-align: center;
     }
@@ -25,8 +25,10 @@
   </style>
 </head>
 <body>
-  <h2>แบบฟอร์มเข้าสอบ</h2>
-  <input type="text" id="name" placeholder="ชื่อ - สกุล" />
+
+  <h2>แบบฟอร์มเข้าสอบภาษาอังกฤษ</h2>
+
+  <input type="text" id="name" placeholder="ชื่อ - สกุล">
   <br>
   <select id="category">
     <option value="">-- เลือกหมวดหมู่ --</option>
@@ -35,12 +37,13 @@
     <option value="ENGLISH">English</option>
   </select>
   <br>
-  <button onclick="submitForm()">เริ่มทำแบบทดสอบ</button>
+  <button id="submitBtn">เริ่มทำแบบทดสอบ</button>
 
   <p id="result"></p>
 
   <script>
-    function submitForm() {
+    // ให้แน่ใจว่าฟังก์ชันถูกแนบหลังโหลด DOM
+    document.getElementById("submitBtn").addEventListener("click", function() {
       const name = document.getElementById("name").value.trim();
       const category = document.getElementById("category").value;
 
@@ -49,20 +52,20 @@
         return;
       }
 
-      const url = "https://script.google.com/macros/s/AKfycbzQogCtd2q7QcGeTqFB7SPL2fb0xCTo1ktcNzejujbousMJTAqHilPEgFFMkGdI7KpbBA/exec" +
-                  "?name=" + encodeURIComponent(name) +
-                  "&category=" + encodeURIComponent(category);
+      const scriptURL = "https://script.google.com/macros/s/AKfycbzQogCtd2q7QcGeTqFB7SPL2fb0xCTo1ktcNzejujbousMJTAqHilPEgFFMkGdI7KpbBA/exec";
+      const url = `${scriptURL}?name=${encodeURIComponent(name)}&category=${encodeURIComponent(category)}`;
 
       fetch(url)
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
           document.getElementById("result").innerText = data.message || "ส่งข้อมูลสำเร็จ!";
         })
-        .catch(err => {
-          console.error(err);
+        .catch(error => {
+          console.error("เกิดข้อผิดพลาด:", error);
           document.getElementById("result").innerText = "เกิดข้อผิดพลาดในการเชื่อมต่อ";
         });
-    }
+    });
   </script>
+
 </body>
 </html>
