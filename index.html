@@ -2,39 +2,65 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>เชื่อมต่อ Apps Script</title>
+  <title>English Test - แบบฟอร์ม</title>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #f6f1ee;
+      padding: 30px;
+      text-align: center;
+    }
+    h2 {
+      color: #5d4037;
+    }
+    input, select, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      color: green;
+    }
+  </style>
 </head>
-<body style="font-family: sans-serif; padding: 30px;">
-  <h2>แบบฟอร์มทดสอบ</h2>
-  <input type="text" id="name" placeholder="ชื่อของคุณ" />
+<body>
+  <h2>แบบฟอร์มเข้าสอบ</h2>
+  <input type="text" id="name" placeholder="ชื่อ - สกุล" />
+  <br>
   <select id="category">
     <option value="">-- เลือกหมวดหมู่ --</option>
     <option value="IT">IT</option>
     <option value="HR">HR</option>
-    <option value="Marketing">Marketing</option>
+    <option value="ENGLISH">English</option>
   </select>
-  <br><br>
-  <button onclick="submitForm()">ส่งข้อมูล</button>
+  <br>
+  <button onclick="submitForm()">เริ่มทำแบบทดสอบ</button>
 
   <p id="result"></p>
 
   <script>
     function submitForm() {
-      const name = document.getElementById('name').value;
-      const category = document.getElementById('category').value;
+      const name = document.getElementById("name").value.trim();
+      const category = document.getElementById("category").value;
+
+      if (!name || !category) {
+        document.getElementById("result").innerText = "กรุณากรอกข้อมูลให้ครบถ้วน";
+        return;
+      }
 
       const url = "https://script.google.com/macros/s/AKfycbzQogCtd2q7QcGeTqFB7SPL2fb0xCTo1ktcNzejujbousMJTAqHilPEgFFMkGdI7KpbBA/exec" +
                   "?name=" + encodeURIComponent(name) +
                   "&category=" + encodeURIComponent(category);
 
-      fetch(https://script.google.com/macros/s/AKfycbzQogCtd2q7QcGeTqFB7SPL2fb0xCTo1ktcNzejujbousMJTAqHilPEgFFMkGdI7KpbBA/exec)
-        .then(response => response.json())
+      fetch(url)
+        .then(res => res.json())
         .then(data => {
-          document.getElementById('result').innerText = data.message;
+          document.getElementById("result").innerText = data.message || "ส่งข้อมูลสำเร็จ!";
         })
-        .catch(error => {
-          document.getElementById('result').innerText = "เกิดข้อผิดพลาด";
-          console.error(error);
+        .catch(err => {
+          console.error(err);
+          document.getElementById("result").innerText = "เกิดข้อผิดพลาดในการเชื่อมต่อ";
         });
     }
   </script>
